@@ -23,10 +23,16 @@ import {
 } from '../../types/admin';
 import {
   INITIAL_MOCK_ISSUES,
-  INITIAL_MOCK_STAFF,
   INITIAL_MOCK_AUDIT_LOG,
   DEPARTMENTS,
 } from './mockAdminData';
+import {
+  getStaffRoster,
+  addStaffToStore,
+  updateStaffDeptInStore,
+  toggleStaffStatusInStore,
+  deleteStaffFromStore,
+} from './staffStore';
 
 const DEFAULT_FILTERS: IssueFilterState = {
   search: '',
@@ -41,7 +47,7 @@ const DEFAULT_FILTERS: IssueFilterState = {
 
 export function useAdminState() {
   const [issues, setIssues] = useState<AdminIssue[]>(() => INITIAL_MOCK_ISSUES);
-  const [staff, setStaff] = useState<StaffMember[]>(() => INITIAL_MOCK_STAFF);
+  const [staff, setStaff] = useState<StaffMember[]>(() => getStaffRoster());
   const [auditLog, setAuditLog] = useState<AuditLogEntry[]>(() => INITIAL_MOCK_AUDIT_LOG);
   const [activeTab, setActiveTab] = useState<AdminTab>('overview');
   const [filters, setFiltersState] = useState<IssueFilterState>(DEFAULT_FILTERS);
@@ -191,79 +197,93 @@ export function useAdminState() {
   );
 
   /**
-   * Add a new staff member (mock only for hackathon demo).
-   * // TODO: backend handles real account creation
+   * Add a new staff member (grants staff panel access on next login per Section ④).
    */
   const addStaff = useCallback(
     async (payload: AddStaffPayload): Promise<boolean> => {
-      setIsLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 350));
-
-      const newStaffId = 'stf-' + Math.random().toString(36).substring(2, 6);
-      const newStaffMember: StaffMember = {
-        id: newStaffId,
-        name: payload.name,
-        email: payload.email,
-        department: payload.department,
-        status: 'active',
-        activeAssignedCount: 0,
-        phone: payload.phone || '+91 98251 ' + Math.floor(10000 + Math.random() * 90000),
-      };
-
-      setStaff((prev) => [newStaffMember, ...prev]);
-      logAudit('ADD_STAFF', `Added staff member ${payload.name} to ${payload.department}`);
-      setIsLoading(false);
-      showNotification(`Added staff member ${payload.name} (${payload.department})`);
-      return true;
+      try {
+        setIsLoading(true);
+        const newMember = await addStaffToStore(payload);
+        setStaff((prev) => [newMember, ...prev]);
+        logAudit('ADD_STAFF', `Added staff member ${payload.name} (${payload.email}) to ${payload.department}`);
+        setIsLoading(false);
+        showNotification(`Added staff member ${payload.name} (${payload.department})`);
+        return true;
+      } catch (err: unknown) {
+        setIsLoading(false);
+        const msg = err instanceof Error ? err.message : 'Failed to add staff member';
+        showNotification(msg);
+        return false;
+      }
     },
     [logAudit, showNotification]
   );
 
   /**
    * Toggle staff status (active / disabled).
-   * // TODO: Replace with PATCH /api/staff/:id/status
    */
   const toggleStaffStatus = useCallback(
     async (staffId: string): Promise<void> => {
-      setStaff((prevStaff) =>
-        prevStaff.map((member) => {
-          if (member.id === staffId) {
-            const nextStatus = member.status === 'active' ? 'disabled' : 'active';
-            logAudit(
-              'TOGGLE_STAFF_STATUS',
-              `Changed status of ${member.name} (${member.department}) to ${nextStatus}`
-            );
-            showNotification(`Updated ${member.name} status to ${nextStatus}`);
-            return { ...member, status: nextStatus };
-          }
-          return member;
-        })
-      );
+      try {
+        const updated = await toggleStaffStatusInStore(staffId);
+        setStaff((prevStaff) =>
+          prevStaff.map((member) => (member.id === staffId ? updated : member))
+        );
+        logAudit(
+          'TOGGLE_STAFF_STATUS',
+          `Changed status of ${updated.name} (${updated.department}) to ${updated.status}`
+        );
+        showNotification(`Updated ${updated.name} status to ${updated.status}`);
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : 'Failed to toggle status';
+        showNotification(msg);
+      }
     },
     [logAudit, showNotification]
   );
 
   /**
-   * Update department assignment for staff.
-   * // TODO: Replace with PATCH /api/staff/:id/department
+   * Update department assignment for staff (name & email immutable per Section ④).
    */
   const updateStaffDepartment = useCallback(
     async (staffId: string, department: DepartmentName): Promise<void> => {
-      setStaff((prevStaff) =>
-        prevStaff.map((member) => {
-          if (member.id === staffId) {
-            logAudit(
-              'UPDATE_STAFF_DEPARTMENT',
-              `Transferred ${member.name} from ${member.department} to ${department}`
-            );
-            showNotification(`Updated ${member.name}'s department to ${department}`);
-            return { ...member, department };
-          }
-          return member;
-        })
-      );
+      try {
+        const updated = await updateStaffDeptInStore(staffId, department);
+        setStaff((prevStaff) =>
+          prevStaff.map((member) => (member.id === staffId ? updated : member))
+        );
+        logAudit(
+          'UPDATE_STAFF_DEPARTMENT',
+          `Transferred ${updated.name} to ${department}`
+        );
+        showNotification(`Updated ${updated.name}'s department to ${department}`);
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : 'Failed to update department';
+        showNotification(msg);
+      }
     },
     [logAudit, showNotification]
+  );
+
+  /**
+   * Delete staff member immediately (Section ④).
+   * Revokes staff panel access on next login, reverting them to citizen panel.
+   */
+  const deleteStaff = useCallback(
+    async (staffId: string): Promise<boolean> => {
+      const target = staff.find((m) => m.id === staffId);
+      const success = await deleteStaffFromStore(staffId);
+      if (success && target) {
+        setStaff((prevStaff) => prevStaff.filter((m) => m.id !== staffId));
+        logAudit(
+          'DELETE_STAFF',
+          `Removed staff member ${target.name} (${target.email}) from ${target.department}`
+        );
+        showNotification(`Removed ${target.name}. On next login, email reverts to citizen access.`);
+      }
+      return success;
+    },
+    [staff, logAudit, showNotification]
   );
 
   // Derived: Filtered Issues list
@@ -366,7 +386,6 @@ export function useAdminState() {
       'Garbage',
       'Water Leakage',
       'Drainage',
-      'Other',
     ];
 
     const categoryDistribution = categories.map((cat) => {
@@ -434,5 +453,6 @@ export function useAdminState() {
     addStaff,
     toggleStaffStatus,
     updateStaffDepartment,
+    deleteStaff,
   };
 }

@@ -24,18 +24,18 @@ export const CategoryGrid: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   return (
-    <section id="categories" className="py-14 md:py-20 px-4 sm:px-6 max-w-6xl mx-auto border-t border-civic-200">
+    <section id="categories" className="py-14 md:py-20 px-4 sm:px-6 max-w-6xl mx-auto border-t border-civic-200 dark:border-civic-800">
       
       <div className="flex flex-col sm:flex-row sm:items-baseline justify-between mb-10">
         <div>
-          <span className="text-xs font-mono uppercase tracking-wider text-civic-500 block mb-1">
+          <span className="text-2xs font-mono uppercase tracking-wider text-civic-500 dark:text-civic-400 block mb-1">
             Dispatch Classification
           </span>
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-civic-950">
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-civic-950 dark:text-civic-50">
             Issue Categories
           </h2>
         </div>
-        <p className="text-xs text-civic-500 font-mono mt-2 sm:mt-0">
+        <p className="text-xs text-civic-500 dark:text-civic-400 font-mono mt-2 sm:mt-0">
           Direct ward team routing
         </p>
       </div>
@@ -50,34 +50,34 @@ export const CategoryGrid: React.FC = () => {
             <div
               key={cat.id}
               onClick={() => setSelectedCategory(cat.id)}
-              className={`p-5 rounded-lg border text-left cursor-pointer transition-all duration-150 flex flex-col justify-between ${
+              className={`p-5 rounded-xl border text-left cursor-pointer transition-all duration-150 flex flex-col justify-between shadow-xs ${
                 isSelected 
-                  ? 'border-civic-950 bg-white ring-1 ring-civic-950 shadow-sm' 
-                  : 'border-civic-200 bg-white/70 hover:bg-white hover:border-civic-300'
+                  ? 'border-accent dark:border-accent bg-white dark:bg-civic-900 ring-1 ring-accent shadow-sm' 
+                  : 'border-civic-200 dark:border-civic-800 bg-white/80 dark:bg-civic-900/80 hover:bg-white dark:hover:bg-civic-900 hover:border-civic-300 dark:hover:border-civic-700'
               }`}
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-8 h-8 rounded-md bg-civic-100 flex items-center justify-center text-civic-800">
+                  <div className="w-8 h-8 rounded-lg bg-civic-100 dark:bg-civic-800 flex items-center justify-center text-civic-800 dark:text-civic-200">
                     <IconComponent size={18} weight="duotone" />
                   </div>
-                  <span className="text-[11px] font-mono text-civic-500">
+                  <span className="text-2xs font-mono text-civic-500 dark:text-civic-400">
                     {cat.count} active reports
                   </span>
                 </div>
 
-                <h3 className="text-sm font-semibold text-civic-950 flex items-center gap-1.5">
+                <h3 className="text-sm font-semibold text-civic-950 dark:text-civic-100 flex items-center gap-1.5">
                   <span>{cat.name}</span>
-                  <ArrowUpRight size={13} className="text-civic-400 group-hover:text-civic-900" />
+                  <ArrowUpRight size={13} className="text-civic-400 group-hover:text-civic-900 dark:group-hover:text-civic-100" />
                 </h3>
 
-                <p className="text-xs text-civic-600 mt-1 leading-relaxed">
+                <p className="text-xs text-civic-600 dark:text-civic-400 mt-1 leading-relaxed">
                   {cat.description}
                 </p>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-civic-100 flex items-center justify-between text-[11px]">
-                <span className="font-mono text-civic-400">Ward Dept: Works</span>
+              <div className="mt-5 pt-3 border-t border-civic-100 dark:border-civic-800 flex items-center justify-between text-2xs">
+                <span className="font-mono text-civic-400 dark:text-civic-500">Ward Dept: Works</span>
                 <span className="font-medium text-accent hover:underline">
                   {isSelected ? 'Selected' : 'Report this →'}
                 </span>
@@ -89,8 +89,8 @@ export const CategoryGrid: React.FC = () => {
 
       {/* Interactive Report Simulation Prompt */}
       {selectedCategory && (
-        <div className="mt-6 p-4 rounded-md bg-civic-100/90 border border-civic-300/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fade-in">
-          <div className="flex items-center gap-2 text-xs text-civic-800">
+        <div className="mt-6 p-4 rounded-xl bg-civic-100/90 dark:bg-civic-900 border border-civic-300/80 dark:border-civic-700 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-2 text-xs text-civic-800 dark:text-civic-200">
             <CheckCircle size={16} weight="fill" className="text-accent" />
             <span>
               Category selected: <strong className="font-semibold">{CATEGORIES.find(c => c.id === selectedCategory)?.name}</strong>. Ready to attach photo and GPS coordinate.
@@ -98,7 +98,7 @@ export const CategoryGrid: React.FC = () => {
           </div>
           <button 
             onClick={() => alert(`Starting report flow for: ${CATEGORIES.find(c => c.id === selectedCategory)?.name}`)}
-            className="px-3.5 py-1.5 bg-civic-900 text-white rounded text-xs font-semibold hover:bg-black transition-colors"
+            className="px-3.5 py-1.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-xs font-semibold shadow-xs transition-colors cursor-pointer"
           >
             Continue with Photo
           </button>

@@ -12,6 +12,7 @@ import {
 } from '@phosphor-icons/react';
 import { DotGridDecoration } from './DotGridDecoration';
 import { FormInput } from './FormInput';
+import { GoogleSignInButton } from './GoogleSignInButton';
 import { authService, UserSession } from '../../lib/appwrite';
 import { registerMockUser } from '../../lib/mockUsers';
 import {
@@ -72,7 +73,6 @@ export const LoginCard: React.FC<LoginCardProps> = ({
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   // Shared UI states
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -247,26 +247,9 @@ export const LoginCard: React.FC<LoginCardProps> = ({
     }
   };
 
-  /**
-   * Handle Google OAuth / Social Login
-   */
-  const handleGoogleLogin = async (): Promise<void> => {
-    try {
-      setIsGoogleLoading(true);
-      setErrorMessage(null);
-      await authService.loginWithGoogle();
-    } catch (err: unknown) {
-      const message =
-        err instanceof Error
-          ? err.message
-          : 'Google sign-in could not be completed.';
-      setErrorMessage(message);
-      setIsGoogleLoading(false);
-    }
-  };
 
   return (
-    <div className="relative w-full max-w-[440px] bg-white dark:bg-civic-900 rounded-3xl p-8 sm:p-10 shadow-[0_12px_40px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.04)] border border-civic-200/90 dark:border-civic-800 transition-all duration-300">
+    <div className="relative w-full max-w-md bg-white dark:bg-civic-900 rounded-3xl p-8 sm:p-10 shadow-xl border border-civic-200 dark:border-civic-800 transition-all duration-300">
       {/* Restrained Dot Grid in Top-Right Corner */}
       <DotGridDecoration rows={4} cols={5} />
 
@@ -275,11 +258,11 @@ export const LoginCard: React.FC<LoginCardProps> = ({
         <div className="mb-7 pr-12">
           <div className="flex items-center gap-2 mb-1.5">
             <span className="w-2 h-2 rounded-full bg-accent inline-block" />
-            <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-civic-500 dark:text-civic-400">
+            <span className="text-2xs font-semibold uppercase tracking-wider text-civic-500 dark:text-civic-400">
               civicFix Auth
             </span>
           </div>
-          <h1 className="text-2xl sm:text-[26px] font-bold text-civic-950 dark:text-civic-50 tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-civic-950 dark:text-civic-50 tracking-tight leading-tight">
             Login
           </h1>
           <p className="text-xs text-civic-500 dark:text-civic-400 mt-1 font-normal">
@@ -290,11 +273,11 @@ export const LoginCard: React.FC<LoginCardProps> = ({
         <div className="mb-5 pr-12">
           <div className="flex items-center gap-2 mb-1.5">
             <span className="w-2 h-2 rounded-full bg-accent inline-block" />
-            <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-civic-500 dark:text-civic-400">
+            <span className="text-2xs font-semibold uppercase tracking-wider text-civic-500 dark:text-civic-400">
               Citizen Registration
             </span>
           </div>
-          <h1 className="text-2xl sm:text-[26px] font-bold text-civic-950 dark:text-civic-50 tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-civic-950 dark:text-civic-50 tracking-tight leading-tight">
             Sign Up
           </h1>
           <p className="text-xs text-civic-500 dark:text-civic-400 mt-1 font-normal">
@@ -302,7 +285,7 @@ export const LoginCard: React.FC<LoginCardProps> = ({
           </p>
 
           {/* R2: Strictly non-selectable citizen role badge */}
-          <div className="mt-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[11px] font-semibold">
+          <div className="mt-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-2xs font-semibold">
             <ShieldCheck size={14} weight="bold" />
             <span>Assigned Role: Citizen</span>
           </div>
@@ -375,7 +358,7 @@ export const LoginCard: React.FC<LoginCardProps> = ({
                     setErrorMessage('Password recovery link will be sent to your verified email address.');
                   }
                 }}
-                className="text-[11px] font-medium text-civic-500 dark:text-civic-400 hover:text-accent dark:hover:text-accent transition-colors underline-offset-2 hover:underline cursor-pointer"
+                className="text-2xs font-medium text-civic-500 dark:text-civic-400 hover:text-accent dark:hover:text-accent transition-colors underline-offset-2 hover:underline cursor-pointer"
               >
                 Forgot Password?
               </button>
@@ -385,8 +368,8 @@ export const LoginCard: React.FC<LoginCardProps> = ({
           {/* Primary Action Button */}
           <button
             type="submit"
-            disabled={isLoggingIn || isGoogleLoading}
-            className="mt-2 w-full py-3 px-4 bg-civic-950 hover:bg-black dark:bg-civic-100 dark:text-civic-950 dark:hover:bg-white text-white text-xs font-semibold tracking-wide rounded-xl shadow-sm hover:shadow-md transition-all duration-150 flex items-center justify-center gap-2 active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed group cursor-pointer"
+            disabled={isLoggingIn}
+            className="mt-2 w-full py-3 px-4 bg-civic-950 hover:bg-black dark:bg-civic-100 dark:text-civic-950 dark:hover:bg-white text-white text-xs font-semibold tracking-wide rounded-xl shadow-sm hover:shadow-md transition-all duration-150 flex items-center justify-center gap-2 active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed group cursor-pointer"
           >
             {isLoggingIn ? (
               <>
@@ -503,8 +486,8 @@ export const LoginCard: React.FC<LoginCardProps> = ({
           {/* Submit Button (disabled when required fields are empty/invalid, enters spinner on submit) */}
           <button
             type="submit"
-            disabled={!isRegistrationValid || isRegistering || isGoogleLoading}
-            className="mt-2 w-full py-3 px-4 bg-civic-950 hover:bg-black dark:bg-civic-100 dark:text-civic-950 dark:hover:bg-white text-white text-xs font-semibold tracking-wide rounded-xl shadow-sm hover:shadow-md transition-all duration-150 flex items-center justify-center gap-2 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed group cursor-pointer"
+            disabled={!isRegistrationValid || isRegistering}
+            className="mt-2 w-full py-3 px-4 bg-civic-950 hover:bg-black dark:bg-civic-100 dark:text-civic-950 dark:hover:bg-white text-white text-xs font-semibold tracking-wide rounded-xl shadow-sm hover:shadow-md transition-all duration-150 flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group cursor-pointer"
           >
             {isRegistering ? (
               <>
@@ -528,44 +511,18 @@ export const LoginCard: React.FC<LoginCardProps> = ({
       {/* Horizontal Divider */}
       <div className="relative my-6 flex items-center justify-center">
         <div className="w-full border-t border-civic-200/90 dark:border-civic-800" />
-        <span className="absolute bg-white dark:bg-civic-900 px-3 text-[10px] font-bold tracking-[0.14em] uppercase text-civic-400 dark:text-civic-500 select-none">
+        <span className="absolute bg-white dark:bg-civic-900 px-3 text-3xs font-bold tracking-widest uppercase text-civic-400 dark:text-civic-500 select-none">
           OR CONTINUE WITH
         </span>
       </div>
 
       {/* Social Login Button */}
       <div className="flex flex-col items-center">
-        <button
-          type="button"
-          onClick={handleGoogleLogin}
-          disabled={isLoggingIn || isRegistering || isGoogleLoading}
-          className="w-full py-2.5 px-4 bg-civic-50 dark:bg-civic-800 hover:bg-civic-100 dark:hover:bg-civic-700 active:bg-civic-200 dark:active:bg-civic-600 border border-civic-200/90 dark:border-civic-700 rounded-full text-xs font-medium text-civic-800 dark:text-civic-200 transition-all duration-150 flex items-center justify-center gap-2.5 shadow-sm active:scale-[0.99] disabled:opacity-70 cursor-pointer"
-        >
-          {isGoogleLoading ? (
-            <CircleNotch size={16} className="animate-spin text-civic-600 dark:text-civic-300" />
-          ) : (
-            <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24">
-              <path
-                fill="#4285F4"
-                d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"
-              />
-              <path
-                fill="#34A853"
-                d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.26v3.15C3.29 21.41 7.37 24 12 24z"
-              />
-              <path
-                fill="#FBBC05"
-                d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.26C.46 8.16 0 9.97 0 12s.46 3.84 1.26 5.42l4.02-3.15z"
-              />
-              <path
-                fill="#EA4335"
-                d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.37 0 3.29 2.59 1.26 6.58l4.02 3.15c.95-2.83 3.6-4.98 6.72-4.98z"
-              />
-            </svg>
-          )}
-          <span>Continue with Google</span>
-        </button>
+        <GoogleSignInButton
+          onError={(err: Error): void => setErrorMessage(err.message)}
+        />
       </div>
+
 
       {/* R1: Mode Toggle Links */}
       <div className="mt-6 text-center">

@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "civicfix-gandhidham",
+    "slug": "civicfix-gandhidham",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "scheme": "appwrite-callback-6aa3a24400158be49594",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#191916"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "io.appwrite.callback6aa3a24400158be49594"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#191916"
+      },
+      "package": "io.appwrite.callback6aa3a24400158be49594"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}

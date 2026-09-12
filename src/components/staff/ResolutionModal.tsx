@@ -80,24 +80,24 @@ export const ResolutionModal: React.FC<ResolutionModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-civic-200 overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="relative w-full max-w-lg bg-white dark:bg-civic-900 rounded-2xl shadow-2xl border border-civic-200 dark:border-civic-800 overflow-hidden flex flex-col max-h-full">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-civic-200 flex items-center justify-between bg-civic-50">
+        <div className="px-6 py-4 border-b border-civic-200 dark:border-civic-800 flex items-center justify-between bg-civic-50 dark:bg-civic-850">
           <div>
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500" />
-              <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">
+              <span className="text-2xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
                 Resolution Proof Verification
               </span>
             </div>
-            <h3 className="text-base font-bold text-civic-900 mt-0.5">
+            <h3 className="text-base font-bold text-civic-900 dark:text-civic-100 mt-0.5">
               Mark Issue {issueId} as Resolved
             </h3>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="text-civic-400 hover:text-civic-700 p-1.5 rounded-lg transition-colors cursor-pointer"
+            className="text-civic-400 hover:text-civic-700 dark:hover:text-civic-200 p-1.5 rounded-lg transition-colors cursor-pointer"
           >
             <X size={18} />
           </button>
@@ -106,7 +106,7 @@ export const ResolutionModal: React.FC<ResolutionModalProps> = ({
         {/* Content */}
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-5">
           {validationError && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-xl flex items-start gap-2.5 text-xs text-red-700">
+            <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-xl flex items-start gap-2.5 text-xs text-red-700 dark:text-red-300">
               <WarningCircle size={16} weight="fill" className="text-red-500 flex-shrink-0 mt-0.5" />
               <span>{validationError}</span>
             </div>
@@ -114,20 +114,20 @@ export const ResolutionModal: React.FC<ResolutionModalProps> = ({
 
           {/* Proof Photo Upload */}
           <div>
-            <label className="block text-xs font-bold text-civic-800 uppercase tracking-wider mb-2">
+            <label className="block text-xs font-bold text-civic-800 dark:text-civic-200 uppercase tracking-wider mb-2">
               Proof-of-Resolution Photo <span className="text-red-500">*</span>
             </label>
 
             {photoUrl ? (
-              <div className="relative rounded-xl border border-emerald-300 bg-emerald-50/50 p-3 flex flex-col items-center">
+              <div className="relative rounded-xl border border-emerald-300 dark:border-emerald-700 bg-emerald-50/50 dark:bg-emerald-950/30 p-3 flex flex-col items-center">
                 <img
                   src={photoUrl}
                   alt="Resolution proof"
                   className="w-full h-44 object-cover rounded-lg shadow-sm"
                 />
                 <div className="mt-2 flex items-center justify-between w-full px-1">
-                  <div className="flex items-center gap-1.5 text-xs text-emerald-800 font-medium truncate">
-                    <CheckCircle size={15} weight="fill" className="text-emerald-600 flex-shrink-0" />
+                  <div className="flex items-center gap-1.5 text-xs text-emerald-800 dark:text-emerald-300 font-medium truncate">
+                    <CheckCircle size={15} weight="fill" className="text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
                     <span className="truncate">{fileName || 'Proof image attached'}</span>
                   </div>
                   <button
@@ -136,25 +136,25 @@ export const ResolutionModal: React.FC<ResolutionModalProps> = ({
                       setPhotoUrl('');
                       setFileName('');
                     }}
-                    className="text-xs text-red-600 hover:text-red-800 font-medium underline ml-2 cursor-pointer"
+                    className="text-xs text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 font-medium underline ml-2 cursor-pointer"
                   >
                     Remove
                   </button>
                 </div>
               </div>
             ) : (
-              <div className="border-2 border-dashed border-civic-300 rounded-xl p-6 text-center hover:border-accent transition-colors bg-civic-50/60">
-                <div className="mx-auto w-10 h-10 rounded-full bg-civic-100 flex items-center justify-center text-civic-500 mb-2">
+              <div className="border-2 border-dashed border-civic-300 dark:border-civic-700 rounded-xl p-6 text-center hover:border-accent transition-colors bg-civic-50/60 dark:bg-civic-800/40">
+                <div className="mx-auto w-10 h-10 rounded-full bg-civic-100 dark:bg-civic-800 flex items-center justify-center text-civic-500 dark:text-civic-400 mb-2">
                   <Camera size={22} />
                 </div>
-                <p className="text-xs font-semibold text-civic-900">
+                <p className="text-xs font-semibold text-civic-900 dark:text-civic-100">
                   Upload on-site rectification photo
                 </p>
-                <p className="text-[11px] text-civic-500 mt-1">
+                <p className="text-2xs text-civic-500 dark:text-civic-400 mt-1">
                   Supports JPG, PNG from device camera or filesystem
                 </p>
 
-                <label className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 bg-civic-900 hover:bg-black text-white text-xs font-semibold rounded-lg cursor-pointer transition-colors">
+                <label className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 bg-civic-900 hover:bg-black dark:bg-civic-100 dark:text-civic-900 dark:hover:bg-white text-white text-xs font-semibold rounded-lg cursor-pointer transition-colors">
                   <UploadSimple size={14} weight="bold" />
                   <span>Choose Photo</span>
                   <input
@@ -169,7 +169,7 @@ export const ResolutionModal: React.FC<ResolutionModalProps> = ({
 
             {/* Quick Sample Selector for Demo */}
             <div className="mt-3">
-              <span className="text-[11px] font-medium text-civic-500 block mb-1.5">
+              <span className="text-2xs font-medium text-civic-500 dark:text-civic-400 block mb-1.5">
                 Or pick mock demo proof photo:
               </span>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -178,7 +178,7 @@ export const ResolutionModal: React.FC<ResolutionModalProps> = ({
                     key={idx}
                     type="button"
                     onClick={() => handleSelectSamplePhoto(sample.url, sample.label)}
-                    className="text-left text-[11px] p-2 bg-civic-100 hover:bg-civic-200 rounded-lg text-civic-700 font-medium line-clamp-2 transition-colors cursor-pointer border border-civic-200"
+                    className="text-left text-2xs p-2 bg-civic-100 hover:bg-civic-200 dark:bg-civic-800 dark:hover:bg-civic-700 rounded-lg text-civic-700 dark:text-civic-300 font-medium line-clamp-2 transition-colors cursor-pointer border border-civic-200 dark:border-civic-700"
                   >
                     📷 {sample.label}
                   </button>
@@ -189,7 +189,7 @@ export const ResolutionModal: React.FC<ResolutionModalProps> = ({
 
           {/* Resolution Notes */}
           <div>
-            <label className="block text-xs font-bold text-civic-800 uppercase tracking-wider mb-2">
+            <label className="block text-xs font-bold text-civic-800 dark:text-civic-200 uppercase tracking-wider mb-2">
               Resolution Action Notes <span className="text-red-500">*</span>
             </label>
             <textarea
@@ -201,16 +201,16 @@ export const ResolutionModal: React.FC<ResolutionModalProps> = ({
                 setValidationError(null);
               }}
               placeholder="E.g., Patch filled with 200kg hot bitumen mix, compacted with 8-ton roller. Carriageway reopened to traffic."
-              className="w-full text-xs text-civic-900 bg-white border border-civic-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent placeholder:text-civic-400"
+              className="w-full text-xs text-civic-900 dark:text-civic-100 bg-white dark:bg-civic-800 border border-civic-300 dark:border-civic-700 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent placeholder:text-civic-400 dark:placeholder:text-civic-500"
             />
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-civic-200">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-civic-200 dark:border-civic-800">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-medium text-civic-600 hover:text-civic-900 transition-colors"
+              className="px-4 py-2 text-xs font-medium text-civic-600 dark:text-civic-400 hover:text-civic-900 dark:hover:text-civic-100 transition-colors"
             >
               Cancel
             </button>

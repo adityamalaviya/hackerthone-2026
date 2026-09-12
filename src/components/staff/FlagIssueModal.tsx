@@ -38,18 +38,18 @@ export const FlagIssueModal: React.FC<FlagIssueModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-civic-200 overflow-hidden">
+      <div className="relative w-full max-w-md bg-white dark:bg-civic-900 rounded-2xl shadow-2xl border border-civic-200 dark:border-civic-800 overflow-hidden">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-civic-200 flex items-center justify-between bg-amber-50/70">
+        <div className="px-6 py-4 border-b border-civic-200 dark:border-civic-800 flex items-center justify-between bg-amber-50/70 dark:bg-amber-950/40">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-amber-100 border border-amber-300 flex items-center justify-center text-amber-700">
+            <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/60 border border-amber-300 dark:border-amber-700 flex items-center justify-center text-amber-700 dark:text-amber-300">
               <Flag size={18} weight="fill" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-civic-950">
+              <h3 className="text-sm font-bold text-civic-950 dark:text-civic-50">
                 Flag Issue {issueId}
               </h3>
-              <p className="text-[11px] text-amber-800">
+              <p className="text-2xs text-amber-800 dark:text-amber-300">
                 Flags ticket for Admin Review
               </p>
             </div>
@@ -57,7 +57,7 @@ export const FlagIssueModal: React.FC<FlagIssueModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="text-civic-400 hover:text-civic-700 p-1.5 rounded-lg transition-colors cursor-pointer"
+            className="text-civic-400 hover:text-civic-700 dark:hover:text-civic-200 p-1.5 rounded-lg transition-colors cursor-pointer"
           >
             <X size={18} />
           </button>
@@ -65,22 +65,22 @@ export const FlagIssueModal: React.FC<FlagIssueModalProps> = ({
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          <div className="p-3 bg-civic-100 rounded-xl flex items-start gap-2 text-xs text-civic-700 border border-civic-200">
-            <ShieldWarning size={16} className="text-civic-600 flex-shrink-0 mt-0.5" />
+          <div className="p-3 bg-civic-100 dark:bg-civic-800/60 rounded-xl flex items-start gap-2 text-xs text-civic-700 dark:text-civic-300 border border-civic-200 dark:border-civic-700">
+            <ShieldWarning size={16} className="text-civic-600 dark:text-civic-400 flex-shrink-0 mt-0.5" />
             <span>
               <strong>Note:</strong> Staff cannot unilaterally close or discard issues. Flagging tags this ticket with a <strong>Pending Admin Review</strong> badge while retaining it in the queue.
             </span>
           </div>
 
           {error && (
-            <div className="p-2.5 bg-red-50 border border-red-200 rounded-lg text-xs text-red-700 flex items-center gap-2">
+            <div className="p-2.5 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-lg text-xs text-red-700 dark:text-red-300 flex items-center gap-2">
               <Warning size={15} weight="fill" className="text-red-500" />
               <span>{error}</span>
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-bold text-civic-800 uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-bold text-civic-800 dark:text-civic-200 uppercase tracking-wider mb-1.5">
               Reason for Flagging <span className="text-red-500">*</span>
             </label>
             <textarea
@@ -92,13 +92,13 @@ export const FlagIssueModal: React.FC<FlagIssueModalProps> = ({
                 setError(null);
               }}
               placeholder="State why this ticket is duplicate, out of jurisdiction, or invalid..."
-              className="w-full text-xs text-civic-900 bg-white border border-civic-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 placeholder:text-civic-400"
+              className="w-full text-xs text-civic-900 dark:text-civic-100 bg-white dark:bg-civic-800 border border-civic-300 dark:border-civic-700 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 placeholder:text-civic-400 dark:placeholder:text-civic-500"
             />
           </div>
 
           {/* Quick Preset Buttons */}
           <div>
-            <span className="text-[11px] font-semibold text-civic-500 block mb-1.5">
+            <span className="text-2xs font-semibold text-civic-500 dark:text-civic-400 block mb-1.5">
               Quick presets:
             </span>
             <div className="flex flex-col gap-1.5">
@@ -110,7 +110,7 @@ export const FlagIssueModal: React.FC<FlagIssueModalProps> = ({
                     setReason(preset);
                     setError(null);
                   }}
-                  className="text-left text-[11px] px-2.5 py-1.5 bg-civic-50 hover:bg-civic-100 border border-civic-200 rounded-lg text-civic-700 transition-colors cursor-pointer"
+                  className="text-left text-2xs px-2.5 py-1.5 bg-civic-50 dark:bg-civic-800/80 hover:bg-civic-100 dark:hover:bg-civic-700 border border-civic-200 dark:border-civic-700 rounded-lg text-civic-700 dark:text-civic-300 transition-colors cursor-pointer"
                 >
                   • {preset}
                 </button>
@@ -119,11 +119,11 @@ export const FlagIssueModal: React.FC<FlagIssueModalProps> = ({
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-civic-200">
+          <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-civic-200 dark:border-civic-800">
             <button
               type="button"
               onClick={onClose}
-              className="px-3.5 py-2 text-xs font-medium text-civic-600 hover:text-civic-900 transition-colors"
+              className="px-3.5 py-2 text-xs font-medium text-civic-600 dark:text-civic-400 hover:text-civic-900 dark:hover:text-civic-100 transition-colors"
             >
               Cancel
             </button>

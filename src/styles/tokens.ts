@@ -6,7 +6,7 @@
 export const TOKENS = {
   colors: {
     civic: {
-      50: '#fbfbfa',
+      50: '#FAF9F6',
       100: '#f4f4f2',
       200: '#e8e8e4',
       300: '#d5d5cd',
