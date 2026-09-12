@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-[#FAF9F6] text-civic-900;
+    @apply bg-civic-50 text-civic-900 dark:bg-civic-950 dark:text-civic-100 selection:bg-accent/15 selection:text-accent font-sans;
   }
 }
 

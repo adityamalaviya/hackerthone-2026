@@ -27,7 +27,7 @@ export const FormInput: React.FC<FormInputProps> = ({
       {/* Uppercase Letter-spaced label */}
       <label
         htmlFor={inputId}
-        className="text-[10px] font-bold tracking-[0.14em] uppercase text-civic-500 dark:text-civic-400 select-none flex items-center justify-between"
+        className="text-3xs font-bold tracking-widest uppercase text-civic-500 dark:text-civic-400 select-none flex items-center justify-between"
       >
         <span>{label}</span>
       </label>
@@ -73,7 +73,7 @@ export const FormInput: React.FC<FormInputProps> = ({
           id={`${inputId}-error`}
           role="alert"
           aria-live="polite"
-          className="text-[11px] text-red-600 dark:text-red-400 font-medium tracking-tight mt-0.5"
+          className="text-2xs text-red-600 dark:text-red-400 font-medium tracking-tight mt-0.5"
         >
           {error}
         </span>

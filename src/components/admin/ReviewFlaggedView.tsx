@@ -92,7 +92,7 @@ export const ReviewFlaggedView: React.FC<ReviewFlaggedViewProps> = ({
 
                   <div className="flex items-center gap-2">
                     <span
-                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${
+                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-2xs font-semibold border ${
                         flagType === 'duplicate'
                           ? 'bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/50 dark:text-purple-300 dark:border-purple-800'
                           : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/50 dark:text-amber-300 dark:border-amber-800'
@@ -127,7 +127,7 @@ export const ReviewFlaggedView: React.FC<ReviewFlaggedViewProps> = ({
                       <Flag size={14} weight="fill" className="text-amber-600 dark:text-amber-400" />
                       <span>Staff Flag Reason:</span>
                     </span>
-                    <span className="text-[11px] text-amber-800/80 dark:text-amber-300/80">
+                    <span className="text-2xs text-amber-800/80 dark:text-amber-300/80">
                       Flagged by {issue.flagged.flaggedByStaffName || 'Assigned Officer'}
                     </span>
                   </div>

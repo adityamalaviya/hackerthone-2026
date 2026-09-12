@@ -3,3 +3,4 @@ export * from './RegisterCard';
 export * from './AuthModal';
 export * from './DotGridDecoration';
 export * from './FormInput';
+export * from './GoogleSignInButton';

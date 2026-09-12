@@ -14,10 +14,14 @@
     "@phosphor-icons/react": "^2.1.10",
     "appwrite": "^27.0.0",
     "clsx": "^2.1.1",
+    "expo-auth-session": "^57.0.12",
+    "expo-web-browser": "^57.0.3",
     "leaflet": "^1.9.4",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "react-leaflet": "^5.0.0",
+    "react-native-appwrite": "^0.35.0",
+    "react-native-url-polyfill": "^4.0.0",
     "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {

@@ -59,7 +59,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         <button
           onClick={onClose}
           aria-label="Close authentication modal"
-          className="absolute -top-3 right-0 sm:right-6 md:right-10 z-10 p-2 text-civic-500 hover:text-civic-900 bg-white/90 hover:bg-white rounded-full shadow-md transition-all active:scale-95"
+          className="absolute -top-3 right-0 sm:right-6 md:right-10 z-10 p-2 text-civic-500 hover:text-civic-900 dark:text-civic-400 dark:hover:text-civic-100 bg-white/90 dark:bg-civic-800/90 hover:bg-white dark:hover:bg-civic-800 rounded-full shadow-md transition-all active:scale-95 border border-civic-200 dark:border-civic-700"
         >
           <X size={18} weight="bold" />
         </button>
@@ -74,29 +74,29 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
         {/* If already logged in, show quick profile & role switcher badge */}
         {activeSession && !successBanner ? (
-          <div className="w-full max-w-[440px] bg-white rounded-3xl p-8 sm:p-10 shadow-[0_12px_40px_rgba(0,0,0,0.06)] border border-civic-200 text-center">
-            <div className="w-12 h-12 rounded-full bg-civic-100 border border-civic-200 mx-auto flex items-center justify-center text-civic-800 mb-4">
+          <div className="w-full max-w-md bg-white dark:bg-civic-900 rounded-3xl p-8 sm:p-10 shadow-xl border border-civic-200 dark:border-civic-800 text-center">
+            <div className="w-12 h-12 rounded-full bg-civic-100 dark:bg-civic-800 border border-civic-200 dark:border-civic-700 mx-auto flex items-center justify-center text-civic-800 dark:text-civic-200 mb-4">
               <User size={24} weight="duotone" />
             </div>
-            <h2 className="text-xl font-bold text-civic-950">Active Session</h2>
-            <p className="text-xs text-civic-500 mt-1">{activeSession.email}</p>
+            <h2 className="text-xl font-bold text-civic-950 dark:text-white">Active Session</h2>
+            <p className="text-xs text-civic-500 dark:text-civic-400 mt-1">{activeSession.email}</p>
 
-            <div className="mt-5 p-3 rounded-2xl bg-civic-50 border border-civic-200/80 text-left text-xs space-y-1.5">
+            <div className="mt-5 p-3 rounded-2xl bg-civic-50 dark:bg-civic-800/60 border border-civic-200/80 dark:border-civic-700 text-left text-xs space-y-1.5">
               <div className="flex justify-between">
-                <span className="text-civic-500 uppercase tracking-wider font-semibold text-[10px]">Name:</span>
-                <span className="font-medium text-civic-900">{activeSession.name}</span>
+                <span className="text-civic-500 dark:text-civic-400 uppercase tracking-wider font-semibold text-3xs">Name:</span>
+                <span className="font-medium text-civic-900 dark:text-civic-100">{activeSession.name}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-civic-500 uppercase tracking-wider font-semibold text-[10px]">Role:</span>
-                <span className="inline-flex items-center gap-1 font-semibold capitalize px-2 py-0.5 rounded-full text-[10px] bg-accent/10 text-accent border border-accent/20">
+                <span className="text-civic-500 dark:text-civic-400 uppercase tracking-wider font-semibold text-3xs">Role:</span>
+                <span className="inline-flex items-center gap-1 font-semibold capitalize px-2 py-0.5 rounded-full text-3xs bg-accent/10 text-accent border border-accent/20">
                   <ShieldCheck size={12} weight="fill" />
                   {activeSession.role}
                 </span>
               </div>
               {activeSession.ward && (
                 <div className="flex justify-between">
-                  <span className="text-civic-500 uppercase tracking-wider font-semibold text-[10px]">Ward / Area:</span>
-                  <span className="text-civic-700 font-normal">{activeSession.ward}</span>
+                  <span className="text-civic-500 dark:text-civic-400 uppercase tracking-wider font-semibold text-3xs">Ward / Area:</span>
+                  <span className="text-civic-700 dark:text-civic-300 font-normal">{activeSession.ward}</span>
                 </div>
               )}
             </div>
@@ -104,13 +104,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <div className="mt-6 flex flex-col gap-2.5">
               <button
                 onClick={onClose}
-                className="w-full py-2.5 px-4 bg-civic-900 hover:bg-black text-white text-xs font-semibold rounded-xl transition-colors"
+                className="w-full py-2.5 px-4 bg-civic-900 hover:bg-black dark:bg-civic-100 dark:text-civic-950 dark:hover:bg-white text-white text-xs font-semibold rounded-xl transition-colors"
               >
-                Continue to Dashboard
+                Continue to Civic Portal
               </button>
               <button
                 onClick={handleLogout}
-                className="w-full py-2 px-4 text-xs font-medium text-red-600 hover:text-red-700 transition-colors"
+                className="w-full py-2 px-4 text-xs font-medium text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors"
               >
                 Sign Out
               </button>

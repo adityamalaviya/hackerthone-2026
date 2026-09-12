@@ -94,7 +94,7 @@ export const EscalationQueueView: React.FC<EscalationQueueViewProps> = ({
                         <div className="font-semibold text-civic-900 dark:text-civic-100 truncate" title={issue.title}>
                           {issue.title}
                         </div>
-                        <div className="text-[11px] text-civic-500 truncate">
+                        <div className="text-2xs text-civic-500 truncate">
                           {issue.locationName} • {issue.ward}
                         </div>
                       </td>
@@ -120,12 +120,12 @@ export const EscalationQueueView: React.FC<EscalationQueueViewProps> = ({
                       {/* Overdue Status */}
                       <td className="py-3 px-4 whitespace-nowrap">
                         {isBreached ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-red-100 text-red-700 dark:bg-red-950/80 dark:text-red-300 border border-red-200 dark:border-red-800 animate-pulse">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-2xs font-bold bg-red-100 text-red-700 dark:bg-red-950/80 dark:text-red-300 border border-red-200 dark:border-red-800 animate-pulse">
                             <ClockAfternoon size={12} weight="bold" />
                             <span>{overdueLabel}</span>
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-2xs font-medium bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
                             <Megaphone size={12} weight="bold" />
                             <span>Staff Flagged</span>
                           </span>
@@ -133,7 +133,7 @@ export const EscalationQueueView: React.FC<EscalationQueueViewProps> = ({
                       </td>
 
                       {/* Escalation Rationale */}
-                      <td className="py-3 px-4 max-w-xs text-[11.5px] text-civic-600 dark:text-civic-400 italic truncate" title={issue.escalationReason}>
+                      <td className="py-3 px-4 max-w-xs text-2xs text-civic-600 dark:text-civic-400 italic truncate" title={issue.escalationReason}>
                         {issue.escalationReason || 'SLA duration exceeded resolution threshold.'}
                       </td>
 

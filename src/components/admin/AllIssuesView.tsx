@@ -288,14 +288,14 @@ export const AllIssuesView: React.FC<AllIssuesViewProps> = ({
                       <div className="font-medium text-civic-900 dark:text-civic-100 truncate" title={issue.title}>
                         {issue.title}
                       </div>
-                      <div className="text-[11px] text-civic-500 dark:text-civic-400 truncate">
+                      <div className="text-2xs text-civic-500 dark:text-civic-400 truncate">
                         {issue.locationName} • {issue.ward}
                       </div>
                     </td>
 
                     {/* Category */}
                     <td className="py-3 px-4 whitespace-nowrap">
-                      <span className="px-2 py-0.5 rounded-md bg-civic-100 dark:bg-civic-800 text-civic-700 dark:text-civic-300 text-[11px] font-medium">
+                      <span className="px-2 py-0.5 rounded-md bg-civic-100 dark:bg-civic-800 text-civic-700 dark:text-civic-300 text-2xs font-medium">
                         {issue.category}
                       </span>
                     </td>
@@ -303,7 +303,7 @@ export const AllIssuesView: React.FC<AllIssuesViewProps> = ({
                     {/* Severity */}
                     <td className="py-3 px-4 whitespace-nowrap">
                       <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10.5px] font-medium border ${
+                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-3xs font-medium border ${
                           SEVERITY_BADGES[issue.severity]
                         }`}
                       >
@@ -323,7 +323,7 @@ export const AllIssuesView: React.FC<AllIssuesViewProps> = ({
                           {issue.assignedStaffName}
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 text-[11px] font-medium text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded-md border border-amber-200 dark:border-amber-800">
+                        <span className="inline-flex items-center gap-1 text-2xs font-medium text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded-md border border-amber-200 dark:border-amber-800">
                           <WarningCircle size={12} weight="bold" />
                           Unassigned
                         </span>
@@ -333,7 +333,7 @@ export const AllIssuesView: React.FC<AllIssuesViewProps> = ({
                     {/* Status */}
                     <td className="py-3 px-4 whitespace-nowrap">
                       <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10.5px] font-medium border ${
+                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-3xs font-medium border ${
                           STATUS_BADGES[issue.status]
                         }`}
                       >
@@ -348,7 +348,7 @@ export const AllIssuesView: React.FC<AllIssuesViewProps> = ({
                           {issue.slaDeadline.slice(0, 10)}
                         </span>
                         {issue.isSlaBreached && (
-                          <div className="text-[10px] font-semibold text-red-600 dark:text-red-400">
+                          <div className="text-3xs font-semibold text-red-600 dark:text-red-400">
                             SLA Breached
                           </div>
                         )}
@@ -361,7 +361,7 @@ export const AllIssuesView: React.FC<AllIssuesViewProps> = ({
                         <button
                           type="button"
                           onClick={() => onOpenAssign(issue)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-medium text-civic-700 dark:text-civic-300 hover:text-civic-950 dark:hover:text-white bg-civic-100 hover:bg-civic-200 dark:bg-civic-800 dark:hover:bg-civic-700 rounded-md transition-colors cursor-pointer"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 text-2xs font-medium text-civic-700 dark:text-civic-300 hover:text-civic-950 dark:hover:text-white bg-civic-100 hover:bg-civic-200 dark:bg-civic-800 dark:hover:bg-civic-700 rounded-md transition-colors cursor-pointer"
                         >
                           <ArrowsClockwise size={12} weight="bold" />
                           <span>Reassign</span>
@@ -370,7 +370,7 @@ export const AllIssuesView: React.FC<AllIssuesViewProps> = ({
                         <button
                           type="button"
                           onClick={() => onOpenAssign(issue)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold text-white bg-civic-900 hover:bg-black dark:bg-civic-100 dark:text-civic-900 dark:hover:bg-white rounded-md shadow-sm transition-colors cursor-pointer"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 text-2xs font-semibold text-white bg-civic-900 hover:bg-black dark:bg-civic-100 dark:text-civic-900 dark:hover:bg-white rounded-md shadow-sm transition-colors cursor-pointer"
                         >
                           <UserPlus size={12} weight="bold" />
                           <span>Assign</span>

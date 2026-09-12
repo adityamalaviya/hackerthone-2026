@@ -25,17 +25,17 @@ const STATS = [
 
 export const StatsBar: React.FC = () => {
   return (
-    <section className="py-12 md:py-16 px-4 sm:px-6 max-w-6xl mx-auto border-t border-civic-200">
+    <section className="py-12 md:py-16 px-4 sm:px-6 max-w-6xl mx-auto border-t border-civic-200 dark:border-civic-800">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
         {STATS.map((stat) => (
           <div key={stat.label} className="flex flex-col">
-            <span className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tighter text-civic-950 font-sans">
+            <span className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tighter text-civic-950 dark:text-civic-50 font-sans">
               {stat.value}
             </span>
-            <span className="text-xs sm:text-sm font-medium text-civic-800 mt-2">
+            <span className="text-xs sm:text-sm font-medium text-civic-800 dark:text-civic-200 mt-2">
               {stat.label}
             </span>
-            <span className="text-[11.5px] text-civic-500 mt-0.5 font-normal">
+            <span className="text-2xs text-civic-500 dark:text-civic-400 mt-0.5 font-normal">
               {stat.subtext}
             </span>
           </div>

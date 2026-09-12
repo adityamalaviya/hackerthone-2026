@@ -158,7 +158,9 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({
           </div>
 
           <div className="space-y-3 pt-1">
-            {metrics.categoryDistribution.map((item) => {
+            {metrics.categoryDistribution
+              .filter((item) => item.category !== 'Other')
+              .map((item) => {
               const color = CATEGORY_COLORS[item.category] || CATEGORY_COLORS.Other;
               return (
                 <div key={item.category} className="space-y-1">
@@ -209,7 +211,7 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({
               return (
                 <div key={dept.department} className="space-y-1">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-medium text-civic-700 dark:text-civic-300 truncate max-w-[200px]">
+                    <span className="font-medium text-civic-700 dark:text-civic-300 truncate max-w-52">
                       {dept.department}
                     </span>
                     <div className="flex items-center gap-2">
@@ -237,7 +239,7 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({
             })}
           </div>
 
-          <div className="mt-4 pt-3 border-t border-civic-100 dark:border-civic-800 flex items-center justify-between text-[11px] text-civic-500">
+          <div className="mt-4 pt-3 border-t border-civic-100 dark:border-civic-800 flex items-center justify-between text-2xs text-civic-500">
             <div className="flex items-center gap-3">
               <span className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-amber-500 inline-block" />
@@ -288,10 +290,10 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({
             const barHeightPct = Math.round((t.resolved / maxResolved) * 100);
             return (
               <div key={t.day} className="flex flex-col items-center gap-1.5 h-full justify-end group">
-                <span className="text-[10px] font-semibold text-civic-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="text-3xs font-semibold text-civic-500 opacity-0 group-hover:opacity-100 transition-opacity">
                   {t.avgHours}h
                 </span>
-                <div className="w-full max-w-[36px] bg-civic-100 dark:bg-civic-800 rounded-t-lg relative flex items-end justify-center overflow-hidden h-28">
+                <div className="w-full max-w-9 bg-civic-100 dark:bg-civic-800 rounded-t-lg relative flex items-end justify-center overflow-hidden h-28">
                   <div
                     className="w-full bg-civic-900 dark:bg-civic-100 rounded-t-lg transition-all duration-500 group-hover:bg-accent"
                     style={{ height: `${barHeightPct}%` }}
@@ -301,7 +303,7 @@ export const AdminOverview: React.FC<AdminOverviewProps> = ({
                   <span className="text-xs font-semibold text-civic-800 dark:text-civic-200 block">
                     {t.day}
                   </span>
-                  <span className="text-[10px] text-civic-400 block">
+                  <span className="text-3xs text-civic-400 block">
                     {t.resolved}
                   </span>
                 </div>

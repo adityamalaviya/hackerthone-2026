@@ -35,7 +35,7 @@ export const NotificationToast: React.FC<NotificationToastProps> = ({
             <span className="text-xs font-semibold text-accent uppercase tracking-wider">
               New Issue Assigned
             </span>
-            <span className="text-[11px] text-civic-400">{toast.timestamp}</span>
+            <span className="text-2xs text-civic-400">{toast.timestamp}</span>
           </div>
 
           <p className="text-xs font-bold text-white mt-1 truncate">

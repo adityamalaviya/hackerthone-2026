@@ -6,9 +6,7 @@ import {
   WarningOctagon,
   Users,
   Scroll,
-  ShieldCheck,
   SignOut,
-  ArrowSquareOut,
   CheckCircle,
 } from '@phosphor-icons/react';
 import { useAdminState } from '../../lib/admin/useAdminState';
@@ -26,15 +24,15 @@ import { AssignModal } from './AssignModal';
 import { LoadingSkeleton } from './LoadingSkeleton';
 
 interface AdminPanelProps {
-  onSwitchToCitizenView?: () => void;
   currentUser?: UserSession | null;
   onLogout?: () => void;
+  onSwitchToCitizenView?: () => void;
 }
 
 export const AdminPanel: React.FC<AdminPanelProps> = ({
-  onSwitchToCitizenView,
   currentUser,
   onLogout,
+  onSwitchToCitizenView,
 }) => {
   const {
     issues,
@@ -78,46 +76,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF9F6] dark:bg-civic-950 text-civic-900 dark:text-civic-100 flex flex-col font-sans transition-colors duration-200">
-      {/* 9. Access Level Banner & Security Notice */}
-      {/* TODO: backend must verify admin role server-side before returning unrestricted issue data */}
-      <div className="bg-civic-900 text-white px-4 py-2 text-xs border-b border-civic-800">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-accent/20 text-accent-subtle border border-accent/40 font-semibold text-[11px] uppercase tracking-wider">
-              <ShieldCheck size={13} weight="fill" />
-              <span>Super Admin Workspace</span>
-            </span>
-            <span className="text-civic-300 text-[11.5px]">
-              Full Unrestricted System Visibility — All Gandhidham Municipal Departments
-            </span>
-          </div>
-
-          <div className="flex items-center gap-3 text-[11.5px]">
-            {onSwitchToCitizenView && (
-              <button
-                type="button"
-                onClick={onSwitchToCitizenView}
-                className="inline-flex items-center gap-1 text-civic-300 hover:text-white underline underline-offset-2 transition-colors cursor-pointer"
-              >
-                <ArrowSquareOut size={13} />
-                <span>Switch to Citizen View</span>
-              </button>
-            )}
-            {onLogout && (
-              <button
-                type="button"
-                onClick={onLogout}
-                className="inline-flex items-center gap-1 text-red-400 hover:text-red-300 transition-colors cursor-pointer"
-              >
-                <SignOut size={13} />
-                <span>Sign Out</span>
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-
+    <div className="min-h-screen bg-civic-50 dark:bg-civic-950 text-civic-900 dark:text-civic-100 flex flex-col font-sans transition-colors duration-200">
       {/* Main Admin Navigation Header */}
       <header className="sticky top-0 z-30 bg-white/95 dark:bg-civic-900/95 backdrop-blur-md border-b border-civic-200 dark:border-civic-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
@@ -133,19 +92,41 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
           </div>
 
-          {/* User profile identifier */}
+          {/* User profile identifier & Controls */}
           <div className="flex items-center gap-3 text-xs">
             <div className="hidden sm:flex flex-col text-right">
               <span className="font-semibold text-civic-900 dark:text-civic-100">
                 {currentUser?.name || 'Super Admin (Municipality)'}
               </span>
-              <span className="text-[11px] text-civic-500">
+              <span className="text-2xs text-civic-500">
                 Gandhidham Municipal Corporation
               </span>
             </div>
             <div className="w-8 h-8 rounded-full bg-civic-900 text-white dark:bg-white dark:text-civic-900 flex items-center justify-center font-bold text-xs shadow-sm">
               AD
             </div>
+
+            {onSwitchToCitizenView && (
+              <button
+                type="button"
+                onClick={onSwitchToCitizenView}
+                className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-civic-700 dark:text-civic-300 hover:bg-civic-100 dark:hover:bg-civic-800 border border-civic-200 dark:border-civic-700 transition-colors cursor-pointer"
+              >
+                <span>Citizen View</span>
+              </button>
+            )}
+
+            {onLogout && (
+              <button
+                type="button"
+                onClick={onLogout}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 border border-red-200 dark:border-red-900/50 transition-colors cursor-pointer"
+                title="Sign Out"
+              >
+                <SignOut size={14} />
+                <span className="hidden sm:inline">Sign Out</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -178,7 +159,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             <ListBullets size={15} weight={activeTab === 'all-issues' ? 'bold' : 'regular'} />
             <span>All Issues</span>
             <span
-              className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
+              className={`px-1.5 py-0.2 rounded-full text-3xs font-bold ${
                 activeTab === 'all-issues'
                   ? 'bg-white/20 text-white dark:bg-civic-900/20 dark:text-civic-950'
                   : 'bg-civic-200 dark:bg-civic-800 text-civic-700 dark:text-civic-300'
@@ -201,7 +182,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             <Flag size={15} weight={activeTab === 'pending-review' ? 'fill' : 'regular'} />
             <span>Pending Review</span>
             {flaggedIssues.length > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-amber-500 text-white">
+              <span className="px-1.5 py-0.2 rounded-full text-3xs font-bold bg-amber-500 text-white">
                 {flaggedIssues.length}
               </span>
             )}
@@ -220,7 +201,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             <WarningOctagon size={15} weight={activeTab === 'escalations' ? 'fill' : 'regular'} />
             <span>Escalations</span>
             {escalatedIssues.length > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-red-600 text-white">
+              <span className="px-1.5 py-0.2 rounded-full text-3xs font-bold bg-red-600 text-white">
                 {escalatedIssues.length}
               </span>
             )}

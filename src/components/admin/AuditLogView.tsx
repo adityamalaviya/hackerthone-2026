@@ -99,7 +99,7 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({ auditLog }) => {
                       className="hover:bg-civic-50/50 dark:hover:bg-civic-800/30 transition-colors"
                     >
                       {/* Timestamp */}
-                      <td className="py-3 px-4 whitespace-nowrap text-civic-500 font-mono text-[11px]">
+                      <td className="py-3 px-4 whitespace-nowrap text-civic-500 font-mono text-2xs">
                         {entry.timestamp}
                       </td>
 
@@ -108,7 +108,7 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({ auditLog }) => {
                         <div className="font-semibold text-civic-900 dark:text-civic-100">
                           {entry.actorName}
                         </div>
-                        <div className="text-[10px] text-civic-400 font-mono">
+                        <div className="text-3xs text-civic-400 font-mono">
                           {entry.actorId}
                         </div>
                       </td>
@@ -116,7 +116,7 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({ auditLog }) => {
                       {/* Action */}
                       <td className="py-3 px-4 whitespace-nowrap">
                         <span
-                          className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10.5px] font-semibold border ${actionBadge}`}
+                          className={`inline-flex items-center px-2 py-0.5 rounded-full text-3xs font-semibold border ${actionBadge}`}
                         >
                           {entry.action}
                         </span>
@@ -125,7 +125,7 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({ auditLog }) => {
                       {/* Issue ID */}
                       <td className="py-3 px-4 whitespace-nowrap">
                         {entry.issueId ? (
-                          <span className="font-mono font-bold text-civic-900 dark:text-civic-100 bg-civic-100 dark:bg-civic-800 px-2 py-0.5 rounded text-[11px]">
+                          <span className="font-mono font-bold text-civic-900 dark:text-civic-100 bg-civic-100 dark:bg-civic-800 px-2 py-0.5 rounded text-2xs">
                             {entry.issueId}
                           </span>
                         ) : (
