@@ -11,9 +11,11 @@ import {
   Camera,
   FileText,
   ShieldCheck,
-  ArrowLeft
+  ArrowLeft,
+  Plus
 } from '@phosphor-icons/react';
-import { getMyIssues } from '../lib/appwrite';
+import { getMyIssues } from './lib/appwrite';
+import { getStoredUserReports, subscribeToNewIssues, StoredCivicReport } from './lib/issueStore';
 
 export interface ReportItem {
   id: string;
@@ -295,15 +297,44 @@ interface EnlargedImageState {
 /**
  * Main ReportActivityPage Component
  */
+const convertStoredToReportItem = (s: StoredCivicReport): ReportItem => {
+  const dateObj = new Date(s.createdAtIso || Date.now());
+  return {
+    id: s.id,
+    issueType: s.title || s.category,
+    description: s.description,
+    date: dateObj.toISOString().split('T')[0],
+    time: dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    location: s.locationName || `${s.ward}, Gandhidham`,
+    issueImage: s.photoDataUrl || s.photoUrl || '/mock/issue1.jpg',
+    status: (s.status === 'Reported' ? 'Submitted' : s.status) as ReportItem['status'],
+    resolvedImage: null,
+  };
+};
+
 export const ReportActivityPage: React.FC<ReportActivityPageProps> = ({
   reports: initialReports,
   onBack,
   onReportIssue
 }) => {
-  const [reports, setReports] = useState<ReportItem[]>(() => (initialReports !== undefined ? initialReports : mockReports));
+  const [reports, setReports] = useState<ReportItem[]>(() => {
+    if (initialReports !== undefined) return initialReports;
+    const stored = getStoredUserReports().map(convertStoredToReportItem);
+    return [...stored, ...mockReports];
+  });
   const [selectedReport, setSelectedReport] = useState<ReportItem | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<string>('All');
   const [enlargedImage, setEnlargedImage] = useState<EnlargedImageState | null>(null);
+
+  // Subscribe to real-time local issue creations
+  useEffect(() => {
+    const unsubscribe = subscribeToNewIssues((newIssue) => {
+      const converted = convertStoredToReportItem(newIssue);
+      setReports((prev) => [converted, ...prev]);
+      setSelectedReport(converted);
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (initialReports !== undefined) return;
@@ -325,7 +356,8 @@ export const ReportActivityPage: React.FC<ReportActivityPageProps> = ({
             status: (doc.status === 'Reported' ? 'Submitted' : doc.status) as ReportItem['status'],
             resolvedImage: doc.resolvedPhotoUrl || null,
           }));
-          setReports(liveReports);
+          const stored = getStoredUserReports().map(convertStoredToReportItem);
+          setReports([...stored, ...liveReports]);
         }
       })
       .catch(() => {
@@ -395,20 +427,33 @@ export const ReportActivityPage: React.FC<ReportActivityPageProps> = ({
               </p>
             </div>
 
-            {/* Metrics Pills */}
-            <div className="flex items-center gap-2 self-start sm:self-auto">
-              <div className="px-3.5 py-1.5 rounded-xl bg-white border border-civic-200 shadow-xs dark:bg-civic-900 dark:border-civic-800 text-center">
-                <span className="block text-3xs text-civic-400 dark:text-civic-500 uppercase font-mono">Total</span>
-                <span className="text-base font-semibold text-civic-950 dark:text-civic-100">{stats.total}</span>
+            {/* Metrics Pills & Action */}
+            <div className="flex flex-wrap items-center gap-3 self-start sm:self-auto">
+              <div className="flex items-center gap-2">
+                <div className="px-3.5 py-1.5 rounded-xl bg-white border border-civic-200 shadow-xs dark:bg-civic-900 dark:border-civic-800 text-center">
+                  <span className="block text-3xs text-civic-400 dark:text-civic-500 uppercase font-mono">Total</span>
+                  <span className="text-base font-semibold text-civic-950 dark:text-civic-100">{stats.total}</span>
+                </div>
+                <div className="px-3.5 py-1.5 rounded-xl bg-white border border-civic-200 shadow-xs dark:bg-civic-900 dark:border-civic-800 text-center">
+                  <span className="block text-3xs text-status-progress uppercase font-mono">Active</span>
+                  <span className="text-base font-semibold text-civic-950 dark:text-civic-100">{stats.inProgress}</span>
+                </div>
+                <div className="px-3.5 py-1.5 rounded-xl bg-white border border-civic-200 shadow-xs dark:bg-civic-900 dark:border-civic-800 text-center">
+                  <span className="block text-3xs text-status-resolved uppercase font-mono">Resolved</span>
+                  <span className="text-base font-semibold text-status-resolved">{stats.resolved}</span>
+                </div>
               </div>
-              <div className="px-3.5 py-1.5 rounded-xl bg-white border border-civic-200 shadow-xs dark:bg-civic-900 dark:border-civic-800 text-center">
-                <span className="block text-3xs text-status-progress uppercase font-mono">Active</span>
-                <span className="text-base font-semibold text-civic-950 dark:text-civic-100">{stats.inProgress}</span>
-              </div>
-              <div className="px-3.5 py-1.5 rounded-xl bg-white border border-civic-200 shadow-xs dark:bg-civic-900 dark:border-civic-800 text-center">
-                <span className="block text-3xs text-status-resolved uppercase font-mono">Resolved</span>
-                <span className="text-base font-semibold text-status-resolved">{stats.resolved}</span>
-              </div>
+
+              {onReportIssue && (
+                <button
+                  type="button"
+                  onClick={onReportIssue}
+                  className="px-3.5 py-2 rounded-xl text-xs font-semibold text-white bg-accent hover:bg-accent-hover shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Plus size={14} weight="bold" />
+                  <span>Report Grievance</span>
+                </button>
+              )}
             </div>
           </div>
 

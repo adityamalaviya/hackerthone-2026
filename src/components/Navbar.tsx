@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { SignOut, Shield, Buildings, UserCircle, User } from '@phosphor-icons/react';
+import { SignOut, Shield, Buildings, UserCircle, User, Plus } from '@phosphor-icons/react';
 import { UserSession } from '../lib/appwrite';
 
 interface NavbarProps {
@@ -9,6 +9,7 @@ interface NavbarProps {
   onOpenStaffPanel?: () => void;
   onOpenAdminPanel?: () => void;
   onOpenReports?: () => void;
+  onOpenReportIssue?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ 
@@ -17,7 +18,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSignOut,
   onOpenStaffPanel,
   onOpenAdminPanel,
-  onOpenReports
+  onOpenReports,
+  onOpenReportIssue
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -71,6 +73,17 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Right: Actions */}
         <div className="flex items-center gap-3 sm:gap-4">
+          {onOpenReportIssue && (
+            <button
+              type="button"
+              onClick={onOpenReportIssue}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-accent hover:bg-accent-hover rounded-lg shadow-xs transition-all duration-150 cursor-pointer"
+            >
+              <Plus size={13} weight="bold" />
+              <span>Report Issue</span>
+            </button>
+          )}
+
           {!currentUser ? (
             <button
               type="button"
@@ -118,6 +131,20 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                   {/* Actions */}
                   <div className="py-1">
+                    {onOpenReportIssue && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setDropdownOpen(false);
+                          onOpenReportIssue();
+                        }}
+                        className="w-full text-left px-4 py-2 text-accent hover:bg-civic-50 dark:hover:bg-civic-800 flex items-center gap-2 cursor-pointer transition-colors font-semibold"
+                      >
+                        <Plus size={15} weight="bold" />
+                        <span>File New Grievance</span>
+                      </button>
+                    )}
+
                     {currentUser.role === 'admin' && onOpenAdminPanel && (
                       <button
                         onClick={() => {

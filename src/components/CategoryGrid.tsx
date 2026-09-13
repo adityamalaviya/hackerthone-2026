@@ -11,6 +11,8 @@ import {
   CheckCircle
 } from '@phosphor-icons/react';
 
+import { CivicCategory } from '../types/admin';
+
 const ICON_MAP: Record<string, React.ElementType> = {
   RoadHorizon,
   Lightbulb,
@@ -20,7 +22,20 @@ const ICON_MAP: Record<string, React.ElementType> = {
   DotsThreeCircle,
 };
 
-export const CategoryGrid: React.FC = () => {
+const CATEGORY_MAP: Record<string, CivicCategory> = {
+  pothole: 'Pothole',
+  streetlight: 'Streetlight',
+  garbage: 'Garbage',
+  water: 'Water Leakage',
+  drainage: 'Drainage',
+  other: 'Other',
+};
+
+interface CategoryGridProps {
+  onReportCategory?: (category: CivicCategory) => void;
+}
+
+export const CategoryGrid: React.FC<CategoryGridProps> = ({ onReportCategory }) => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   return (
@@ -78,9 +93,17 @@ export const CategoryGrid: React.FC = () => {
 
               <div className="mt-5 pt-3 border-t border-civic-100 dark:border-civic-800 flex items-center justify-between text-2xs">
                 <span className="font-mono text-civic-400 dark:text-civic-500">Ward Dept: Works</span>
-                <span className="font-medium text-accent hover:underline">
-                  {isSelected ? 'Selected' : 'Report this →'}
-                </span>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const mapped = CATEGORY_MAP[cat.id] || 'Other';
+                    onReportCategory?.(mapped);
+                  }}
+                  className="font-medium text-accent hover:underline cursor-pointer"
+                >
+                  Report this →
+                </button>
               </div>
             </div>
           );
@@ -97,10 +120,14 @@ export const CategoryGrid: React.FC = () => {
             </span>
           </div>
           <button 
-            onClick={() => alert(`Starting report flow for: ${CATEGORIES.find(c => c.id === selectedCategory)?.name}`)}
+            type="button"
+            onClick={() => {
+              const mapped = CATEGORY_MAP[selectedCategory] || 'Other';
+              onReportCategory?.(mapped);
+            }}
             className="px-3.5 py-1.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-xs font-semibold shadow-xs transition-colors cursor-pointer"
           >
-            Continue with Photo
+            File Grievance with Photo
           </button>
         </div>
       )}

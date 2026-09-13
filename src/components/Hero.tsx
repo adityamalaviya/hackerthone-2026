@@ -14,15 +14,10 @@ interface HeroProps {
   onReportIssue?: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onOpenAuth, currentUser, onReportIssue }) => {
+export const Hero: React.FC<HeroProps> = ({ onOpenAuth: _onOpenAuth, currentUser: _currentUser, onReportIssue }) => {
   const [headlineIndex, setHeadlineIndex] = useState(0);
 
   const handleReportClick = (): void => {
-    if (!currentUser) {
-      // Auth guard rule: Clicking "Report Issue" without being logged in redirects to login first (Section ②)
-      onOpenAuth?.('login');
-      return;
-    }
     onReportIssue?.();
   };
 

@@ -18,7 +18,9 @@ import {
   OAuthFailurePage,
 } from './pages';
 import { ReportActivityPage } from './ReportActivityPage';
-import { ShieldCheck } from '@phosphor-icons/react';
+import { ShieldCheck, Camera } from '@phosphor-icons/react';
+import { ReportIssueModal } from './components/report/ReportIssueModal';
+import { CivicCategory } from './types/admin';
 
 export const App: React.FC = (): React.JSX.Element => {
   const [currentPath, setCurrentPath] = useState<string>(() => {
@@ -30,6 +32,20 @@ export const App: React.FC = (): React.JSX.Element => {
   const [staffViewMode, setStaffViewMode] = useState<'staff' | 'citizen'>('staff');
   const [adminViewMode, setAdminViewMode] = useState<'admin' | 'citizen'>('admin');
   const [citizenViewMode, setCitizenViewMode] = useState<'home' | 'reports'>('home');
+  const [isReportModalOpen, setIsReportModalOpen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.location.pathname === '/report' || window.location.pathname === '/report/';
+    }
+    return false;
+  });
+  const [reportCategory, setReportCategory] = useState<CivicCategory>('Pothole');
+
+  const handleOpenReportModal = (cat?: CivicCategory) => {
+    if (cat) {
+      setReportCategory(cat);
+    }
+    setIsReportModalOpen(true);
+  };
 
   useEffect(() => {
     const handlePopState = (): void => {
@@ -106,6 +122,7 @@ export const App: React.FC = (): React.JSX.Element => {
             onOpenStaffPanel={() => setStaffViewMode('staff')}
             onOpenAdminPanel={() => setAdminViewMode('admin')}
             onOpenReports={() => setCitizenViewMode('reports')}
+            onOpenReportIssue={() => handleOpenReportModal()}
           />
           <main className="flex-1 flex items-center justify-center p-6">
             <div className="max-w-md w-full p-8 bg-white border border-civic-200 dark:bg-civic-900 dark:border-civic-800 rounded-xl text-center shadow-sm">
@@ -149,6 +166,20 @@ export const App: React.FC = (): React.JSX.Element => {
             onClose={() => setIsAuthOpen(false)}
             onAuthSuccess={handleAuthSuccess}
           />
+          <ReportIssueModal
+            isOpen={isReportModalOpen}
+            onClose={() => setIsReportModalOpen(false)}
+            currentUser={currentUser}
+            initialCategory={reportCategory}
+            onViewReports={() => setCitizenViewMode('reports')}
+            onViewMap={() => {
+              setCitizenViewMode('home');
+              setTimeout(() => {
+                const mapEl = document.getElementById('map');
+                if (mapEl) mapEl.scrollIntoView({ behavior: 'smooth' });
+              }, 150);
+            }}
+          />
         </div>
       );
     }
@@ -162,6 +193,7 @@ export const App: React.FC = (): React.JSX.Element => {
           onOpenStaffPanel={() => setStaffViewMode('staff')}
           onOpenAdminPanel={() => setAdminViewMode('admin')}
           onOpenReports={() => setCitizenViewMode('reports')}
+          onOpenReportIssue={() => handleOpenReportModal()}
         />
         <main className="flex-1">
           <ReportActivityPage
@@ -172,17 +204,7 @@ export const App: React.FC = (): React.JSX.Element => {
                 setCurrentPath('/');
               }
             }}
-            onReportIssue={() => {
-              setCitizenViewMode('home');
-              if (typeof window !== 'undefined' && window.location.pathname !== '/') {
-                window.history.pushState({}, '', '/');
-                setCurrentPath('/');
-              }
-              setTimeout(() => {
-                const mapEl = document.getElementById('map');
-                if (mapEl) mapEl.scrollIntoView({ behavior: 'smooth' });
-              }, 150);
-            }}
+            onReportIssue={() => handleOpenReportModal()}
           />
         </main>
         <Footer />
@@ -191,6 +213,20 @@ export const App: React.FC = (): React.JSX.Element => {
           initialMode={authMode}
           onClose={() => setIsAuthOpen(false)}
           onAuthSuccess={handleAuthSuccess}
+        />
+        <ReportIssueModal
+          isOpen={isReportModalOpen}
+          onClose={() => setIsReportModalOpen(false)}
+          currentUser={currentUser}
+          initialCategory={reportCategory}
+          onViewReports={() => setCitizenViewMode('reports')}
+          onViewMap={() => {
+            setCitizenViewMode('home');
+            setTimeout(() => {
+              const mapEl = document.getElementById('map');
+              if (mapEl) mapEl.scrollIntoView({ behavior: 'smooth' });
+            }, 150);
+          }}
         />
       </div>
     );
@@ -249,25 +285,36 @@ export const App: React.FC = (): React.JSX.Element => {
         onOpenStaffPanel={() => setStaffViewMode('staff')}
         onOpenAdminPanel={() => setAdminViewMode('admin')}
         onOpenReports={() => setCitizenViewMode('reports')}
+        onOpenReportIssue={() => handleOpenReportModal()}
       />
 
       <main className="flex-1">
         <Hero
           onOpenAuth={handleOpenAuth}
           currentUser={currentUser}
-          onReportIssue={() => {
-            const mapEl = document.getElementById('map');
-            if (mapEl) mapEl.scrollIntoView({ behavior: 'smooth' });
-          }}
+          onReportIssue={() => handleOpenReportModal()}
         />
         <MapPreview />
         <HowItWorks />
         <StatusStepper />
         <StatsBar />
-        <CategoryGrid />
+        <CategoryGrid
+          onReportCategory={(cat) => handleOpenReportModal(cat)}
+        />
       </main>
       
       <Footer />
+
+      {/* Floating Action Button (FAB) for Instant Problem Reporting */}
+      <button
+        type="button"
+        onClick={() => handleOpenReportModal()}
+        className="fixed bottom-6 right-6 z-30 inline-flex items-center gap-2 px-4 py-3 rounded-full bg-accent hover:bg-accent-hover text-white font-semibold text-xs shadow-xl hover:shadow-2xl transition-all duration-200 cursor-pointer active:scale-95 group"
+        aria-label="Report a Civic Problem"
+      >
+        <Camera size={18} weight="bold" className="group-hover:rotate-12 transition-transform" />
+        <span className="hidden sm:inline">Report Problem</span>
+      </button>
 
       {/* Auth Modal with Login and Register Cards */}
       <AuthModal
@@ -275,6 +322,32 @@ export const App: React.FC = (): React.JSX.Element => {
         initialMode={authMode}
         onClose={() => setIsAuthOpen(false)}
         onAuthSuccess={handleAuthSuccess}
+      />
+
+      {/* Civic Problem Reporting Modal with Photo Upload & Location Detection */}
+      <ReportIssueModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        currentUser={currentUser}
+        initialCategory={reportCategory}
+        onViewReports={() => {
+          setCitizenViewMode('reports');
+          if (typeof window !== 'undefined' && window.location.pathname !== '/reports') {
+            window.history.pushState({}, '', '/reports');
+            setCurrentPath('/reports');
+          }
+        }}
+        onViewMap={() => {
+          setCitizenViewMode('home');
+          if (typeof window !== 'undefined' && window.location.pathname !== '/') {
+            window.history.pushState({}, '', '/');
+            setCurrentPath('/');
+          }
+          setTimeout(() => {
+            const mapEl = document.getElementById('map');
+            if (mapEl) mapEl.scrollIntoView({ behavior: 'smooth' });
+          }, 150);
+        }}
       />
     </div>
   );

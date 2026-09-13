@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
-import { MOCK_ISSUES, CivicIssue } from '../data/mockIssues';
+import { CivicIssue } from '../data/mockIssues';
 import { TOKENS } from '../styles/tokens';
 import { CaretRight, CheckCircle, Clock, WarningCircle, Funnel } from '@phosphor-icons/react';
 import { getAllIssues, subscribeToIssues } from '../lib/appwrite';
+import { getAllCivicIssues, subscribeToNewIssues, getStoredUserReports } from '../lib/issueStore';
 
 // Create custom minimalist status markers referencing design tokens
 const createMinimalMarker = (status: CivicIssue['status']) => {
@@ -34,9 +35,18 @@ const createMinimalMarker = (status: CivicIssue['status']) => {
 };
 
 export const MapPreview: React.FC = () => {
-  const [issues, setIssues] = useState<CivicIssue[]>(MOCK_ISSUES);
+  const [issues, setIssues] = useState<CivicIssue[]>(() => getAllCivicIssues());
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [selectedIssue, setSelectedIssue] = useState<CivicIssue | null>(MOCK_ISSUES[0]);
+  const [selectedIssue, setSelectedIssue] = useState<CivicIssue | null>(() => getAllCivicIssues()[0] || null);
+
+  // Subscribe to newly reported civic issues
+  useEffect(() => {
+    const unsub = subscribeToNewIssues((newReport) => {
+      setIssues((prev) => [newReport, ...prev]);
+      setSelectedIssue(newReport);
+    });
+    return () => unsub();
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -60,12 +70,14 @@ export const MapPreview: React.FC = () => {
             ward: doc.ward || 'Ward 4 (Central)',
             votes: typeof doc.votes === 'number' ? doc.votes : 0,
           }));
-          setIssues(liveIssues);
-          setSelectedIssue(liveIssues[0]);
+          const stored = getStoredUserReports();
+          setIssues([...stored, ...liveIssues]);
+          setSelectedIssue(stored[0] || liveIssues[0]);
         }
       })
       .catch(() => {
-        // Fall back gracefully to MOCK_ISSUES
+        // Fall back gracefully to stored and mock issues
+        setIssues(getAllCivicIssues());
       });
 
     // Realtime subscription for live map pin updates
@@ -89,7 +101,8 @@ export const MapPreview: React.FC = () => {
               ward: doc.ward || 'Ward 4 (Central)',
               votes: typeof doc.votes === 'number' ? doc.votes : 0,
             }));
-            setIssues(liveIssues);
+            const stored = getStoredUserReports();
+            setIssues([...stored, ...liveIssues]);
           }
         })
         .catch(() => {});
